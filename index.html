@@ -1,89 +1,140 @@
-// ----------------------------
-// START
-// ----------------------------
-console.log("Game Started");
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WWII Craft Game</title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #1a1a1a;
+      color: white;
+      text-align: center;
+    }
 
+    select, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    #log {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #555;
+      height: 200px;
+      overflow-y: auto;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🌍 WWII Infinite Craft</h1>
+
+<h3>Select Two Elements</h3>
+
+<select id="item1"></select>
+<select id="item2"></select>
+
+<br>
+
+<button onclick="combineItems()">Combine</button>
+<button onclick="resetGame()">End Game</button>
+
+<div id="log"></div>
+
+<script>
 // ----------------------------
 // INITIALIZATION
 // ----------------------------
-let inventory = [
+let discovered = new Set([
   "Bomb", "Atom", "Uranium", "Japan", "United States"
-];
+]);
 
-let discovered = new Set(inventory);
-
-// Example recipes (replace with CSV later)
 let recipes = [
   { a: "Uranium", b: "Bomb", result: "Atomic bomb" },
   { a: "Japan", b: "United States", result: "America joining War" }
 ];
 
 // ----------------------------
-// MAIN GAME LOOP
+// UPDATE DROPDOWNS
 // ----------------------------
-function startGame() {
-  let playing = true;
+function updateDropdowns() {
+  let item1 = document.getElementById("item1");
+  let item2 = document.getElementById("item2");
 
-  while (playing) {
-    console.log("\nInventory:", [...discovered]);
+  item1.innerHTML = "";
+  item2.innerHTML = "";
 
-    // ----------------------------
-    // USER INPUT (Select 2 items)
-    // ----------------------------
-    let item1 = prompt("Choose first item:");
-    let item2 = prompt("Choose second item:");
+  discovered.forEach(item => {
+    let option1 = document.createElement("option");
+    option1.text = item;
+    item1.add(option1);
 
-    // ----------------------------
-    // VALIDATION CHECK
-    // ----------------------------
-    if (!discovered.has(item1) || !discovered.has(item2)) {
-      alert("Invalid items selected.");
-      continue;
-    }
-
-    // ----------------------------
-    // COMBINATION CHECK (DECISION DIAMOND)
-    // ----------------------------
-    let recipe = recipes.find(r =>
-      (r.a === item1 && r.b === item2) ||
-      (r.a === item2 && r.b === item1)
-    );
-
-    if (recipe) {
-      // ----------------------------
-      // YES PATH → CREATE RESULT
-      // ----------------------------
-      if (!discovered.has(recipe.result)) {
-        discovered.add(recipe.result);
-        alert("New discovery: " + recipe.result);
-      } else {
-        alert("Already discovered: " + recipe.result);
-      }
-
-    } else {
-      // ----------------------------
-      // NO PATH → FAILURE
-      // ----------------------------
-      alert("No combination found.");
-    }
-
-    // ----------------------------
-    // CONTINUE? (DECISION DIAMOND)
-    // ----------------------------
-    let again = prompt("Continue? (yes/no)");
-
-    if (again.toLowerCase() !== "yes") {
-      playing = false;
-    }
-  }
-
-  // ----------------------------
-  // END
-  // ----------------------------
-  console.log("Game Ended");
+    let option2 = document.createElement("option");
+    option2.text = item;
+    item2.add(option2);
+  });
 }
 
 // ----------------------------
-// RUN GAME
+// LOG FUNCTION
 // ----------------------------
-startGame();
+function log(message) {
+  let logDiv = document.getElementById("log");
+  logDiv.innerHTML += message + "<br>";
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+// ----------------------------
+// COMBINE LOGIC (FLOWCHART CORE)
+// ----------------------------
+function combineItems() {
+  let item1 = document.getElementById("item1").value;
+  let item2 = document.getElementById("item2").value;
+
+  log("Combining: " + item1 + " + " + item2);
+
+  // VALIDATION CHECK
+  if (!discovered.has(item1) || !discovered.has(item2)) {
+    log("❌ Invalid selection");
+    return;
+  }
+
+  // COMBINATION CHECK
+  let recipe = recipes.find(r =>
+    (r.a === item1 && r.b === item2) ||
+    (r.a === item2 && r.b === item1)
+  );
+
+  if (recipe) {
+    // YES PATH
+    if (!discovered.has(recipe.result)) {
+      discovered.add(recipe.result);
+      log("✅ New Discovery: " + recipe.result);
+      updateDropdowns();
+    } else {
+      log("⚠️ Already discovered: " + recipe.result);
+    }
+  } else {
+    // NO PATH
+    log("❌ No combination found");
+  }
+}
+
+// ----------------------------
+// END GAME
+// ----------------------------
+function resetGame() {
+  log("Game Ended");
+}
+
+// ----------------------------
+// START
+// ----------------------------
+updateDropdowns();
+log("Game Started");
+</script>
+
+</body>
+</html>
