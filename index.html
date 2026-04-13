@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WWII Craft Game</title>
+  <title>WWII Craft</title>
   <style>
     body {
       font-family: Arial;
@@ -52,32 +52,60 @@ let discovered = new Set([
 ]);
 
 let recipes = [
-  { a: "Atom", b: "Bomb", result: "Atomic Bomb" },
-  { a: "Bomb", b: "Pearl Harbor", result: "America joining War" },
-  { a: "Atomic Bomb", b: "Japan", result: "Japan Surrenders" },
-  { a: "Germany", b: "Poland", result: "Invasion of Poland" },
-  { a: "Germany", b: "Soviet Union", result: "The Nazi-Soviet Pact" },
-  { a: "Soviet Union", b: "Poland", result: "Soviet Invasion of Poland" },
-  { a: "U.S. Navy", b: "Japanese Navy", result: "Battle of Midway" },
-  { a: "England", b: "Eygpt", result: "Battle of Elamien" },
-  { a: "Soviet Union", b: "Japan", result: "Soviet Invasion of Manchuria" },
-  { a: "Hitler", b: "Soviet Union", result: "Death of Hitler" },
-  { a: "Emperor Hirohite", b: "Potsdam Declaration", result: "Japanese Surrender Announcement" },
-  { a: "Surrender", b: "USS Missouri", result: "Formal Surrender of Japan" },
-  { a: "Soviet Union", b: "German Capital", result: "Battle of Berlin" },
-  { a: "Allies", b: "Potsdam Declaration", result: "Trying to get Japan to surrender" },
-  { a: "Atomic Bomb", b: "Nagasaki", result: "Second Atom Bomb Dropped on Japan" },
-  { a: "Albert E.", b: "Letter to Roosevelt", result: "Project Y" },
-  { a: "Uranium", b: "Atomic Bomb", result: "Little Boy" },
-  { a: "Plutonium", b: "Atomic Bomb", result: "Fat Man" },
-  { a: " Little Boy", b: "August 6th, 1945", result: "Bombing of Hiroshima" },
-  { a: "Fat Man", b: "August 9th, 1945", result: "Bombing of Nagasaki" },
-  { a: "America", b: "Soviet Union", result: "High Tensions" },
-  { a: "East Germany", b: "Soviet Union", result: "Berlin Wall" },
-  { a: "Harry Truman", b: "Winston Churchill", result: "Potsdam Declaration" },
-  { a: "Operation Barbossa ", b: "June 22nd 1941", result: "Nazi betrays aggrement with invasion of Soviet Union" },
-  { a: "Soviet Union", b: "Operation Uranus", result: "Circling the German 6th army" },
+  { id: "1", a: "Atom", b: "Bomb", result: "Atomic Bomb" },
+  { id: "2", a: "Bomb", b: "Pearl Harbor", result: "America joining War" },
+  { id: "3", a: "Atomic Bomb", b: "Japan", result: "Japan Surrenders" },
+  { id: "4", a: "Germany", b: "Poland", result: "Invasion of Poland" },
+  { id: "5", a: "Germany", b: "Soviet Union", result: "The Nazi-Soviet Pact" },
+  { id: "6", a: "Soviet Union", b: "Poland", result: "Soviet Invasion of Poland" },
+  { id: "7", a: "United States Navy", b: "Japanese Navy", result: "Battle of Midway" },
+  { id: "8", a: "England", b: "Egypt", result: "Battle of Elamien" },
+  { id: "9", a: "Soviet Union", b: "Japan", result: "Soviet Invasion of Manchuria" },
+  { id: "10", a: "Hitler", b: "Soviet Union", result: "Death of Hitler" },
+  { id: "11", a: "Emperor Hirohito", b: "Potsdam Declaration", result: "Japanese Surrender Announcement" },
+  { id: "12", a: "Surrender", b: "USS Missouri", result: "Formal Surrender of Japan" },
+  { id: "13", a: "Soviet Union", b: "German Capital", result: "Battle of Berlin" },
+  { id: "14", a: "Allies", b: "Potsdam Declaration", result: "Trying to get Japan to surrender" },
+  { id: "15", a: "Atomic Bomb", b: "Nagasaki", result: "Second Atom Bomb Dropped on Japan" },
+  { id: "16", a: "Albert Einstein", b: "Letter to Roosevelt", result: "Project Y" },
+  { id: "17", a: "Uranium", b: "Atomic Bomb", result: "Little Boy" },
+  { id: "18", a: "Plutonium", b: "Atomic Bomb", result: "Fat Man" },
+  { id: "19", a: "Little Boy", b: "August 6th, 1945", result: "Bombing of Hiroshima" },
+  { id: "20", a: "Fat Man", b: "August 9th, 1945", result: "Bombing of Nagasaki" },
+  { id: "21", a: "America", b: "Soviet Union", result: "High Tensions" },
+  { id: "22", a: "East Germany", b: "Soviet Union", result: "Berlin Wall" },
+  { id: "23", a: "Harry Truman", b: "Winston Churchill", result: "Potsdam Declaration" },
+  { id: "24", a: "Operation Barbarossa", b: "June 22nd, 1941", result: "Nazi betrays aggrement with invasion of Soviet Union" },
+  { id: "25", a: "Soviet Union", b: "Operation Uranus", result: "Circling the German 6th army" },
 ];
+let descriptions = [
+  {id: "1", description: "The Atomic bombings of Hiroshima and Nagasaki were the first use of nuclear weapons in warfare. Scientists developed the atomic bomb through the Manhattan Project during World War II. These bombs released massive destructive energy from splitting atoms, changing warfare forever."},
+  {id: "2", description: "The Attack on Pearl Harbor occurred on December 7, 1941, when Japan launched a surprise bombing of a U.S. naval base in Hawaii. This attack destroyed ships, planes, and killed over 2,000 Americans. As a result, the United States declared war on Japan and officially entered World War II."},
+  {id: "3", description: "After atomic bombs were dropped on Japan, the country faced overwhelming destruction and loss of life. The bombings made it clear that continuing the war would lead to even greater devastation. Japan decided to surrender shortly afterward, ending World War II."},
+  {id: "4", description: "The Invasion of Poland began on September 1, 1939, when Nazi Germany attacked Poland. This invasion used fast-moving military tactics called blitzkrieg. It marked the official start of World War II in Europe."},
+  {id: "5", description: "The Molotov–Ribbentrop Pact was a non-aggression agreement between Germany and the Soviet Union in 1939. It included a secret plan to divide Eastern Europe between the two powers. This pact allowed Germany to invade Poland without fear of Soviet interference at first."},
+  {id: "6", description: "Soon after Germany attacked Poland, the Soviet invasion of Poland began from the east. This followed the secret agreement in the Nazi-Soviet Pact. Together, Germany and the Soviet Union divided and occupied Poland"},
+  {id: "7", description: "The Battle of Midway was a major naval battle in June 1942. The United States defeated Japan by sinking four of its aircraft carriers. This victory was a turning point in the Pacific War."},
+  {id: "8", description: "The Second Battle of El Alamein took place in Egypt in 1942. British forces stopped and pushed back German and Italian troops led by Erwin Rommel. This victory helped secure North Africa for the Allies."},
+  {id: "9", description: "The Soviet invasion of Manchuria occurred in August 1945 near the end of the war. Soviet forces quickly defeated Japanese troops in the region. This invasion added pressure on Japan to surrender."},
+  {id: "10", description: "Adolf Hitler died in April 1945 as Soviet forces closed in on Berlin. He took his own life in a bunker rather than be captured. His death marked the collapse of Nazi Germany’s leadership."},
+  {id: "11", description: "Hirohito announced Japan’s surrender after the Potsdam Declaration demanded it. The declaration warned Japan of total destruction if it did not surrender. Hirohito’s announcement was the first time many Japanese citizens had ever heard his voice."},
+  {id: "12", description: "The formal surrender of Japan took place aboard the USS Missouri (BB-63) on September 2, 1945. Japanese officials signed documents agreeing to end the war. This event officially ended World War II."},
+  {id: "13", description: "The Battle of Berlin was the final major battle in Europe in 1945. Soviet forces attacked and captured Berlin, the capital of Germany. This led directly to Germany’s surrender."},
+  {id: "14", description: "The Potsdam Declaration was issued by Allied powers in July 1945. It called for Japan’s unconditional surrender and warned of severe consequences if ignored. Japan initially refused, leading to further actions like the atomic bombings."},
+  {id: "15", description: "The second atomic bomb was dropped on the Japanese city of Nagasaki on August 9, 1945. It caused massive destruction and loss of life. This bombing, along with others, pushed Japan to surrender soon after."},
+  {id: "16", description: "Albert Einstein helped alert the U.S. government to the dangers of Nazi nuclear research by signing a letter to Franklin D. Roosevelt in 1939. This letter warned that Germany might develop powerful atomic weapons. It led to the creation of the secret U.S. nuclear program, including Manhattan Project, whose main lab was called Project Y."},
+  {id: "17", description: "The atomic bomb known as Little Boy used uranium as its main fuel. Uranium atoms were split in a nuclear reaction to release a huge amount of energy. This type of bomb was simpler in design compared to later atomic weapons."},
+  {id: "18", description: "The atomic bomb called Fat Man used plutonium instead of uranium. It relied on a more complex implosion design to trigger the explosion. This made it more powerful and efficient than the uranium bomb."},
+  {id: "19", description: "On August 6, 1945, the bomb Little Boy was dropped on the city of Hiroshima. It caused massive destruction and killed tens of thousands instantly. This was the first time an atomic bomb was used in war."},
+  {id: "20", description: "On August 9, 1945, the bomb Fat Man was dropped on Nagasaki. The explosion caused widespread destruction and heavy casualties. This second bombing increased pressure on Japan to surrender."},
+  {id: "21", description: "After World War II, the United States and the Soviet Union became rivals in what is known as the Cold War. Both nations competed for global influence and power. This led to political tension, military buildup, and fear of nuclear war."},
+  {id: "22", description: "The Berlin Wall was built in 1961 to divide East and West Berlin. East Germany, supported by the Soviet Union, wanted to stop people from fleeing to the West. The wall became a powerful symbol of Cold War division."},
+  {id: "23", description: "Harry S. Truman and Winston Churchill were key leaders behind the Potsdam Declaration. They worked with other Allied leaders to demand Japan’s surrender. The declaration warned Japan of complete destruction if it refused."},
+  {id: "24", description: "Operation Barbarossa began on June 22, 1941, when Germany invaded the Soviet Union. This broke the earlier non-aggression agreement between the two nations. It opened up the Eastern Front, one of the largest and deadliest parts of the war."},
+  {id: "25", description: "Operation Uranus was a Soviet counteroffensive during the Battle of Stalingrad. Soviet forces surrounded the German 6th Army, trapping thousands of soldiers. This marked a major turning point in favor of the Allies on the Eastern Front."},
+  ]; 
+
 
 // ----------------------------
 // UPDATE DROPDOWNS
@@ -99,7 +127,13 @@ function updateDropdowns() {
     item2.add(option2);
   });
 }
-
+//-----------------------------
+// MATCH COMBINATION ID WITH DESCRIPTION ID
+//-----------------------------
+function getDescriptionById(id) {
+  let match = descriptions.find(d => d.id === id);
+  return match ? match.description : "No description found.";
+}
 // ----------------------------
 // LOG FUNCTION
 // ----------------------------
@@ -135,6 +169,8 @@ function combineItems() {
     if (!discovered.has(recipe.result)) {
       discovered.add(recipe.result);
       log("✅ New Discovery: " + recipe.result);
+      let desc = getDescriptionById(recipe.id);
+      log("📖 " + desc);
       updateDropdowns();
     } else {
       log("⚠️ Already discovered: " + recipe.result);
