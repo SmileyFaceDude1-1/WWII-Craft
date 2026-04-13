@@ -5,146 +5,92 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/SmileyFaceDude1-1/WWII-Craft.git
 git push -u origin main
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8" />
-  <title>WWII Combination Game</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background:#111; color:#f5f5f5; }
-    h1 { margin-bottom: 5px; }
-    .card { background:#222; padding:15px; margin:10px 0; border-radius:8px; }
-    select { margin:5px 0; padding:5px; width:100%; }
-    button { margin-top:10px; padding:8px 12px; cursor:pointer; }
-    #result { margin-top:10px; font-weight:bold; }
-    #score { margin-top:10px; }
-  </style>
-</head>
-<body>
-  <h1>WWII Combination Game</h1>
-  <p>Match the correct <b>Year</b>, <b>Alliance/Country</b>, and <b>Outcome</b> for the event.</p>
+// ----------------------------
+// START
+// ----------------------------
+console.log("Game Started");
 
-  <div class="card">
-    <div><b>Event:</b> <span id="eventName"></span></div>
+// ----------------------------
+// INITIALIZATION
+// ----------------------------
+let inventory = [
+  "Bomb", "Atom", "Uranium", "Japan", "United States"
+];
 
-    <label>Year:</label>
-    <select id="yearSelect"></select>
+let discovered = new Set(inventory);
 
-    <label>Alliance / Country:</label>
-    <select id="sideSelect"></select>
+// Example recipes (replace with CSV later)
+let recipes = [
+  { a: "Uranium", b: "Bomb", result: "Atomic bomb" },
+  { a: "Japan", b: "United States", result: "America joining War" }
+];
 
-    <label>Outcome / Key Idea:</label>
-    <select id="outcomeSelect"></select>
+// ----------------------------
+// MAIN GAME LOOP
+// ----------------------------
+function startGame() {
+  let playing = true;
 
-    <button onclick="checkAnswer()">Check</button>
-    <button onclick="nextQuestion()">Next</button>
+  while (playing) {
+    console.log("\nInventory:", [...discovered]);
 
-    <div id="result"></div>
-    <div id="score"></div>
-  </div>
+    // ----------------------------
+    // USER INPUT (Select 2 items)
+    // ----------------------------
+    let item1 = prompt("Choose first item:");
+    let item2 = prompt("Choose second item:");
 
-  <script>
-    // --- DATA: edit these to match your Canva slides ---
-    const combos = [
-      {
-        event: "D-Day",
-        year: "1944",
-        side: "Allies",
-        outcome: "Opened Western Front in Europe"
-      },
-      {
-        event: "Pearl Harbor",
-        year: "1941",
-        side: "United States",
-        outcome: "U.S. enters WWII"
-      },
-      {
-        event: "Battle of Stalingrad",
-        year: "1942–1943",
-        side: "Soviet Union",
-        outcome: "Turning point on Eastern Front"
-      },
-      {
-        event: "Hiroshima Bombing",
-        year: "1945",
-        side: "Japan",
-        outcome: "Led to Japan’s surrender"
-      }
-    ];
-
-    // Build option pools from data
-    const years = [...new Set(combos.map(c => c.year))];
-    const sides = [...new Set(combos.map(c => c.side))];
-    const outcomes = [...new Set(combos.map(c => c.outcome))];
-
-    let currentIndex = 0;
-    let score = 0;
-
-    const eventName = document.getElementById("eventName");
-    const yearSelect = document.getElementById("yearSelect");
-    const sideSelect = document.getElementById("sideSelect");
-    const outcomeSelect = document.getElementById("outcomeSelect");
-    const resultDiv = document.getElementById("result");
-    const scoreDiv = document.getElementById("score");
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
+    // ----------------------------
+    // VALIDATION CHECK
+    // ----------------------------
+    if (!discovered.has(item1) || !discovered.has(item2)) {
+      alert("Invalid items selected.");
+      continue;
     }
 
-    function fillSelect(select, options) {
-      select.innerHTML = "";
-      options.forEach(opt => {
-        const o = document.createElement("option");
-        o.value = opt;
-        o.textContent = opt;
-        select.appendChild(o);
-      });
-    }
+    // ----------------------------
+    // COMBINATION CHECK (DECISION DIAMOND)
+    // ----------------------------
+    let recipe = recipes.find(r =>
+      (r.a === item1 && r.b === item2) ||
+      (r.a === item2 && r.b === item1)
+    );
 
-    function loadQuestion() {
-      const combo = combos[currentIndex];
-      eventName.textContent = combo.event;
-
-      // Shuffle options so it's not always in order
-      fillSelect(yearSelect, shuffle([...years]));
-      fillSelect(sideSelect, shuffle([...sides]));
-      fillSelect(outcomeSelect, shuffle([...outcomes]));
-
-      resultDiv.textContent = "";
-      scoreDiv.textContent = "Score: " + score;
-    }
-
-    function checkAnswer() {
-      const combo = combos[currentIndex];
-      const y = yearSelect.value;
-      const s = sideSelect.value;
-      const o = outcomeSelect.value;
-
-      if (y === combo.year && s === combo.side && o === combo.outcome) {
-        resultDiv.textContent = "Correct!";
-        resultDiv.style.color = "#4caf50";
-        score += 10;
+    if (recipe) {
+      // ----------------------------
+      // YES PATH → CREATE RESULT
+      // ----------------------------
+      if (!discovered.has(recipe.result)) {
+        discovered.add(recipe.result);
+        alert("New discovery: " + recipe.result);
       } else {
-        resultDiv.textContent =
-          "Not quite. Correct combo: " +
-          combo.year + " | " + combo.side + " | " + combo.outcome;
-        resultDiv.style.color = "#ff5252";
-        score -= 5;
+        alert("Already discovered: " + recipe.result);
       }
-      scoreDiv.textContent = "Score: " + score;
+
+    } else {
+      // ----------------------------
+      // NO PATH → FAILURE
+      // ----------------------------
+      alert("No combination found.");
     }
 
-    function nextQuestion() {
-      currentIndex = (currentIndex + 1) % combos.length;
-      loadQuestion();
-    }
+    // ----------------------------
+    // CONTINUE? (DECISION DIAMOND)
+    // ----------------------------
+    let again = prompt("Continue? (yes/no)");
 
-    // Start game
-    loadQuestion();
-  </script>
-</body>
-</html>
+    if (again.toLowerCase() !== "yes") {
+      playing = false;
+    }
+  }
+
+  // ----------------------------
+  // END
+  // ----------------------------
+  console.log("Game Ended");
+}
+
+// ----------------------------
+// RUN GAME
+// ----------------------------
+startGame();
