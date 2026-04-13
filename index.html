@@ -45,15 +45,38 @@
 
 <script>
 // ----------------------------
-// INITIALIZATION
+// INITIALIZATION OF COMBINATIONS AND ELEMENTS
 // ----------------------------
 let discovered = new Set([
   " ", "Bomb", "Atom", "Uranium", "Plutonium", "Surrender", "USS Missouri", "Letter to Roosevelt", "Poland", "Japan", "Germany", "Soviet Union", "Egypt", "England", "United States Navy", "Japanese Navy", "United States", "German Capital", "Allies", "Nagasaki", "East Germany", "Pearl Harbor", "Operation Barbarossa", "Operation Uranus", "Hitler", "Emperor Hirohito", "Albert Einstein", "Harry Truman", "Winston Churchill", "August 6th, 1945", "August 9th, 1945", "June 22nd, 1941"
 ]);
 
 let recipes = [
-  { a: "Uranium", b: "Bomb", result: "Atomic bomb" },
-  { a: "Japan", b: "United States", result: "America joining War" }
+  { a: "Atom", b: "Bomb", result: "Atomic Bomb" },
+  { a: "Bomb", b: "Pearl Harbor", result: "America joining War" },
+  { a: "Atomic Bomb", b: "Japan", result: "Japan Surrenders" },
+  { a: "Germany", b: "Poland", result: "Invasion of Poland" },
+  { a: "Germany", b: "Soviet Union", result: "The Nazi-Soviet Pact" },
+  { a: "Soviet Union", b: "Poland", result: "Soviet Invasion of Poland" },
+  { a: "U.S. Navy", b: "Japanese Navy", result: "Battle of Midway" },
+  { a: "England", b: "Eygpt", result: "Battle of Elamien" },
+  { a: "Soviet Union", b: "Japan", result: "Soviet Invasion of Manchuria" },
+  { a: "Hitler", b: "Soviet Union", result: "Death of Hitler" },
+  { a: "Emperor Hirohite", b: "Potsdam Declaration", result: "Japanese Surrender Announcement" },
+  { a: "Surrender", b: "USS Missouri", result: "Formal Surrender of Japan" },
+  { a: "Soviet Union", b: "German Capital", result: "Battle of Berlin" },
+  { a: "Allies", b: "Potsdam Declaration", result: "Trying to get Japan to surrender" },
+  { a: "Atomic Bomb", b: "Nagasaki", result: "Second Atom Bomb Dropped on Japan" },
+  { a: "Albert E.", b: "Letter to Roosevelt", result: "Project Y" },
+  { a: "Uranium", b: "Atomic Bomb", result: "Little Boy" },
+  { a: "Plutonium", b: "Atomic Bomb", result: "Fat Man" },
+  { a: " Little Boy", b: "August 6th, 1945", result: "Bombing of Hiroshima" },
+  { a: "Fat Man", b: "August 9th, 1945", result: "Bombing of Nagasaki" },
+  { a: "America", b: "Soviet Union", result: "High Tensions" },
+  { a: "East Germany", b: "Soviet Union", result: "Berlin Wall" },
+  { a: "Harry Truman", b: "Winston Churchill", result: "Potsdam Declaration" },
+  { a: "Operation Barbossa ", b: "June 22nd 1941", result: "Nazi betrays aggrement with invasion of Soviet Union" },
+  { a: "Soviet Union", b: "Operation Uranus", result: "Circling the German 6th army" },
 ];
 
 // ----------------------------
@@ -87,7 +110,7 @@ function log(message) {
 }
 
 // ----------------------------
-// COMBINE LOGIC (FLOWCHART CORE)
+// COMBINE LOGIC 
 // ----------------------------
 function combineItems() {
   let item1 = document.getElementById("item1").value;
@@ -121,14 +144,6 @@ function combineItems() {
     log("❌ No combination found");
   }
 }
-
-// ----------------------------
-// END GAME
-// ----------------------------
-function resetGame() {
-  log("Game Ended");
-}
-
 // ----------------------------
 // START
 // ----------------------------
