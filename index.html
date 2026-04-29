@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WWII Craft</title>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #4B5320;
+      --paper: #1c1a14;
+      --gold: #c9a84c;
+      --red: #8b1a1a;
+      --red-bright: #cc2222;
+      --text: #e8dfc0;
+      --muted: #7a7060;
+      --border: #3a3020;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Special Elite', cursive;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================
+       TITLE SCREEN
+    ============================ */
+    #titleScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(139,26,26,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(139,26,26,0.1) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    /* Animated scanlines */
+    #titleScreen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.15) 2px,
+        rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .title-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .title-stamp {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(56px, 12vw, 110px);
+      color: var(--gold);
+      letter-spacing: 8px;
+      line-height: 0.9;
+      text-shadow:
+        4px 4px 0px var(--red),
+        8px 8px 0px rgba(139,26,26,0.4),
+        0 0 60px rgba(201,168,76,0.2);
+      animation: flicker 6s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 95%, 100% { opacity: 1; }
+      96% { opacity: 0.85; }
+      97% { opacity: 1; }
+      98% { opacity: 0.9; }
+    }
+
+    .title-sub {
+      font-family: 'Special Elite', cursive;
+      font-size: clamp(13px, 2.5vw, 18px);
+      color: var(--muted);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-top: 8px;
+      margin-bottom: 40px;
+    }
+
+    /* Scene illustration */
+    .title-scene {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0 40px;
+      flex-wrap: wrap;
+    }
+
+    .scene-figure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: fadeUp 1s ease both;
+    }
+
+    .scene-figure:nth-child(1) { animation-delay: 0.2s; }
+    .scene-figure:nth-child(2) { animation-delay: 0.5s; }
+    .scene-figure:nth-child(3) { animation-delay: 0.8s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .scene-icon {
+      font-size: clamp(48px, 10vw, 80px);
+      filter: drop-shadow(0 4px 12px rgba(201,168,76,0.3));
+    }
+
+    .scene-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .plus-sign {
+      font-size: 32px;
+      color: var(--red);
+      margin-bottom: 30px;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    /* Divider */
+    .title-divider {
+      width: 300px;
+      max-width: 80vw;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 10px auto 30px;
+    }
+
+    .crafting-hint {
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 40px;
+    }
+
+    .crafting-hint strong {
+      color: var(--gold);
+    }
+
+    /* Start button */
+    #startBtn {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      letter-spacing: 6px;
+      padding: 16px 52px;
+      background: transparent;
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    #startBtn::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(201,168,76,0.3);
+      transition: all 0.2s;
+    }
+
+    #startBtn:hover {
+      background: var(--red);
+      border-color: var(--red-bright);
+      color: #fff;
+      box-shadow: 0 0 30px rgba(204,34,34,0.4);
+    }
+
+    #startBtn:hover::before {
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .corner-decoration {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-color: rgba(201,168,76,0.25);
+      border-style: solid;
+    }
+    .corner-decoration.tl { top: 20px; left: 20px; border-width: 2px 0 0 2px; }
+    .corner-decoration.tr { top: 20px; right: 20px; border-width: 2px 2px 0 0; }
+    .corner-decoration.bl { bottom: 20px; left: 20px; border-width: 0 0 2px 2px; }
+    .corner-decoration.br { bottom: 20px; right: 20px; border-width: 0 2px 2px 0; }
+
+    /* ============================
+       GAME SCREEN
+    ============================ */
+    #gameScreen {
+      display: none;
+      min-height: 100vh;
+      padding: 20px;
+      background:
+        radial-gradient(ellipse at top, rgba(139,26,26,0.08) 0%, transparent 50%),
+        var(--bg);
+    }
+
+    .game-header {
+      text-align: center;
+      padding: 20px 0 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+    }
+
+    .game-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 36px;
+      color: var(--gold);
+      letter-spacing: 6px;
+      text-shadow: 2px 2px 0 var(--red);
+    }
+
+    .game-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 4px;
+      margin-top: 4px;
+    }
+
+    /* Combine panel */
+    .combine-panel {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      padding: 30px;
+      position: relative;
+    }
+
+    .combine-panel::before {
+      content: 'COMBINE ELEMENTS';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: var(--paper);
+      padding: 0 10px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--gold);
+    }
+
+    .combine-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    select {
+      font-family: 'Special Elite', cursive;
+      font-size: 14px;
+      padding: 10px 14px;
+      background: #0d0d0d;
+      color: var(--text);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      flex: 1;
+      min-width: 160px;
+      max-width: 240px;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .operator {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      color: var(--red);
+      flex-shrink: 0;
+    }
+
+    #combineBtn {
+      font-family: 'Oswald', sans-serif;
+      font-size: 15px;
+      letter-spacing: 4px;
+      padding: 11px 30px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      margin-top: 18px;
+      width: 100%;
+      max-width: 700px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #combineBtn:hover {
+      background: var(--red-bright);
+      box-shadow: 0 0 20px rgba(204,34,34,0.35);
+    }
+
+    /* Discoveries counter */
+    .stats-bar {
+      max-width: 700px;
+      margin: 0 auto 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+
+    .discovery-count {
+      color: var(--gold);
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+    }
+
+    /* Log */
+    #log {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      padding: 16px;
+      height: 260px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    #log::before {
+      content: 'MISSION LOG';
+      display: block;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    #log::-webkit-scrollbar { width: 4px; }
+    #log::-webkit-scrollbar-track { background: #0d0d0d; }
+    #log::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .log-entry { margin-bottom: 4px; }
+    .log-success { color: #6dbf6d; }
+    .log-warn { color: var(--gold); }
+    .log-fail { color: var(--red-bright); }
+    .log-desc { color: #a09070; font-style: italic; padding-left: 16px; border-left: 2px solid var(--border); margin: 4px 0 8px; }
+    .log-system { color: var(--muted); }
+
+    /* Back button */
+    #backBtn {
+      font-family: 'Special Elite', cursive;
+      font-size: 12px;
+      letter-spacing: 2px;
+      padding: 8px 18px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    #backBtn:hover {
+      color: var(--text);
+      border-color: var(--muted);
+    }
+
+    /* ============================
+       DISCOVERY POPUP
+    ============================ */
+    #popupOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #popupOverlay.active {
+      display: flex;
+      animation: overlayIn 0.25s ease;
+    }
+
+    @keyframes overlayIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    #popupBox {
+      background: var(--paper);
+      border: 1px solid var(--gold);
+      max-width: 520px;
+      width: 100%;
+      padding: 36px 32px 28px;
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Corner accents */
+    #popupBox::before, #popupBox::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    #popupBox::before { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+    #popupBox::after  { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+    .popup-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .popup-formula {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(13px, 3vw, 17px);
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .popup-formula span {
+      color: var(--text);
+    }
+
+    .popup-formula .pop-result {
+      color: var(--gold);
+    }
+
+    .popup-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 16px 0;
+    }
+
+    .popup-result-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(20px, 5vw, 28px);
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      text-shadow: 1px 1px 0 var(--red);
+    }
+
+    .popup-description {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #a09070;
+      font-style: italic;
+    }
+
+    #popupClose {
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      letter-spacing: 4px;
+      padding: 10px 28px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      margin-top: 24px;
+      display: block;
+      width: 100%;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    #popupClose:hover {
+      background: var(--red);
+      border-color: var(--red-bright);
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================
+     TITLE SCREEN
+============================ -->
+<div id="titleScreen">
+  <div class="corner-decoration tl"></div>
+  <div class="corner-decoration tr"></div>
+  <div class="corner-decoration bl"></div>
+  <div class="corner-decoration br"></div>
+
+  <div class="title-content">
+    <div class="title-stamp">WWII<br>CRAFT</div>
+    <div class="title-sub">Discover History Through Combination</div>
+
+    <div class="title-divider"></div>
+
+    <div class="title-scene">
+      <div class="scene-figure">
+        <div class="scene-icon">🗾</div>
+        <div class="scene-label">Japan</div>
+      </div>
+      <div class="plus-sign">+</div>
+      <div class="scene-figure">
+        <div class="scene-icon">💣</div>
+        <div class="scene-label">Atomic Bomb</div>
+      </div>
+      <div class="plus-sign">=</div>
+      <div class="scene-figure">
+        <div class="scene-icon">🏳️</div>
+        <div class="scene-label">Surrender</div>
+      </div>
+    </div>
+
+    <div class="title-divider"></div>
+
+    <div class="crafting-hint">
+      Combine elements to unlock <strong>25 historical events</strong>
+    </div>
+
+    <button id="startBtn" onclick="startGame()">▶ &nbsp; BEGIN</button>
+  </div>
+</div>
+
+<!-- ============================
+     GAME SCREEN
+============================ -->
+<div id="gameScreen">
+  <button id="backBtn" onclick="goBack()">← MENU</button>
+
+  <div class="game-header">
+    <div class="game-title">WWII CRAFT</div>
+    <div class="game-subtitle">Combine elements · Discover history</div>
+  </div>
+
+  <div class="stats-bar">
+    <span>DISCOVERIES</span>
+    <span class="discovery-count" id="discoveryCount">0 / 25</span>
+  </div>
+
+  <div class="combine-panel">
+    <div class="combine-row">
+      <select id="item1"></select>
+      <span class="operator">+</span>
+      <select id="item2"></select>
+    </div>
+  </div>
+
+  <button id="combineBtn" onclick="combineItems()">COMBINE</button>
+
+  <br>
+
+  <div id="log"></div>
+</div>
+
+<!-- ============================
+     DISCOVERY POPUP
+============================ -->
+<div id="popupOverlay" onclick="closePopup(event)">
+  <div id="popupBox">
+    <div class="popup-label">✅ New Discovery</div>
+    <div class="popup-formula">
+      <span id="popEl1"></span>
+      &nbsp;+&nbsp;
+      <span id="popEl2"></span>
+      &nbsp;=&nbsp;
+      <span class="pop-result" id="popResult"></span>
+    </div>
+    <div class="popup-divider"></div>
+    <div class="popup-result-title" id="popResultTitle"></div>
+    <div class="popup-description" id="popDesc"></div>
+    <button id="popupClose" onclick="closePopup()">CONTINUE</button>
+  </div>
+</div>
+
+<script>
+// ----------------------------
+// DATA
+// ----------------------------
+let discovered = new Set([
+  " ", "Bomb", "Atom", "Uranium", "Plutonium", "Surrender", "USS Missouri",
+  "Letter to Roosevelt", "Poland", "Japan", "Germany", "Soviet Union",
+  "Egypt", "England", "United States Navy", "Japanese Navy", "United States",
+  "German Capital", "Allies", "Nagasaki", "East Germany", "Pearl Harbor",
+  "Operation Barbarossa", "Operation Uranus", "Hitler", "Emperor Hirohito",
+  "Albert Einstein", "Harry Truman", "Winston Churchill",
+  "August 6th, 1945", "August 9th, 1945", "June 22nd, 1941"
+]);
+
+let recipes = [
+  { id: "1",  a: "Atom",               b: "Bomb",                 result: "Atomic Bomb" },
+  { id: "2",  a: "Bomb",               b: "Pearl Harbor",         result: "America joining War" },
+  { id: "3",  a: "Atomic Bomb",        b: "Japan",                result: "Japan Surrenders" },
+  { id: "4",  a: "Germany",            b: "Poland",               result: "Invasion of Poland" },
+  { id: "5",  a: "Germany",            b: "Soviet Union",         result: "The Nazi-Soviet Pact" },
+  { id: "6",  a: "Soviet Union",       b: "Poland",               result: "Soviet Invasion of Poland" },
+  { id: "7",  a: "United States Navy", b: "Japanese Navy",        result: "Battle of Midway" },
+  { id: "8",  a: "England",            b: "Egypt",                result: "Battle of El Alamein" },
+  { id: "9",  a: "Soviet Union",       b: "Japan",                result: "Soviet Invasion of Manchuria" },
+  { id: "10", a: "Hitler",             b: "Soviet Union",         result: "Death of Hitler" },
+  { id: "11", a: "Emperor Hirohito",   b: "Potsdam Declaration",  result: "Japanese Surrender Announcement" },
+  { id: "12", a: "Surrender",          b: "USS Missouri",         result: "Formal Surrender of Japan" },
+  { id: "13", a: "Soviet Union",       b: "German Capital",       result: "Battle of Berlin" },
+  { id: "14", a: "Allies",             b: "Potsdam Declaration",  result: "Trying to get Japan to Surrender" },
+  { id: "15", a: "Atomic Bomb",        b: "Nagasaki",             result: "Second Atom Bomb Dropped on Japan" },
+  { id: "16", a: "Albert Einstein",    b: "Letter to Roosevelt",  result: "Project Y" },
+  { id: "17", a: "Uranium",            b: "Atomic Bomb",          result: "Little Boy" },
+  { id: "18", a: "Plutonium",          b: "Atomic Bomb",          result: "Fat Man" },
+  { id: "19", a: "Little Boy",         b: "August 6th, 1945",     result: "Bombing of Hiroshima" },
+  { id: "20", a: "Fat Man",            b: "August 9th, 1945",     result: "Bombing of Nagasaki" },
+  { id: "21", a: "United States",      b: "Soviet Union",         result: "High Tensions" },
+  { id: "22", a: "East Germany",       b: "Soviet Union",         result: "Berlin Wall" },
+  { id: "23", a: "Harry Truman",       b: "Winston Churchill",    result: "Potsdam Declaration" },
+  { id: "24", a: "Operation Barbarossa", b: "June 22nd, 1941",   result: "Nazi Betrayal: Invasion of Soviet Union" },
+  { id: "25", a: "Soviet Union",       b: "Operation Uranus",     result: "Circling the German 6th Army" },
+];
+
+let descriptions = [
+  { id: "1",  description: "The Atomic bombings of Hiroshima and Nagasaki were the first use of nuclear weapons in warfare. Scientists developed the atomic bomb through the Manhattan Project during World War II. These bombs released massive destructive energy from splitting atoms, changing warfare forever." },
+  { id: "2",  description: "The Attack on Pearl Harbor occurred on December 7, 1941, when Japan launched a surprise bombing of a U.S. naval base in Hawaii. This attack destroyed ships, planes, and killed over 2,000 Americans. As a result, the United States declared war on Japan and officially entered World War II." },
+  { id: "3",  description: "After atomic bombs were dropped on Japan, the country faced overwhelming destruction and loss of life. The bombings made it clear that continuing the war would lead to even greater devastation. Japan decided to surrender shortly afterward, ending World War II." },
+  { id: "4",  description: "The Invasion of Poland began on September 1, 1939, when Nazi Germany attacked Poland. This invasion used fast-moving military tactics called blitzkrieg. It marked the official start of World War II in Europe." },
+  { id: "5",  description: "The Molotov–Ribbentrop Pact was a non-aggression agreement between Germany and the Soviet Union in 1939. It included a secret plan to divide Eastern Europe between the two powers. This pact allowed Germany to invade Poland without fear of Soviet interference at first." },
+  { id: "6",  description: "Soon after Germany attacked Poland, the Soviet invasion of Poland began from the east. This followed the secret agreement in the Nazi-Soviet Pact. Together, Germany and the Soviet Union divided and occupied Poland." },
+  { id: "7",  description: "The Battle of Midway was a major naval battle in June 1942. The United States defeated Japan by sinking four of its aircraft carriers. This victory was a turning point in the Pacific War." },
+  { id: "8",  description: "The Second Battle of El Alamein took place in Egypt in 1942. British forces stopped and pushed back German and Italian troops led by Erwin Rommel. This victory helped secure North Africa for the Allies." },
+  { id: "9",  description: "The Soviet invasion of Manchuria occurred in August 1945 near the end of the war. Soviet forces quickly defeated Japanese troops in the region. This invasion added pressure on Japan to surrender." },
+  { id: "10", description: "Adolf Hitler died in April 1945 as Soviet forces closed in on Berlin. He took his own life in a bunker rather than be captured. His death marked the collapse of Nazi Germany's leadership." },
+  { id: "11", description: "Hirohito announced Japan's surrender after the Potsdam Declaration demanded it. The declaration warned Japan of total destruction if it did not surrender. Hirohito's announcement was the first time many Japanese citizens had ever heard his voice." },
+  { id: "12", description: "The formal surrender of Japan took place aboard the USS Missouri on September 2, 1945. Japanese officials signed documents agreeing to end the war. This event officially ended World War II." },
+  { id: "13", description: "The Battle of Berlin was the final major battle in Europe in 1945. Soviet forces attacked and captured Berlin, the capital of Germany. This led directly to Germany's surrender." },
+  { id: "14", description: "The Potsdam Declaration was issued by Allied powers in July 1945. It called for Japan's unconditional surrender and warned of severe consequences if ignored. Japan initially refused, leading to further actions like the atomic bombings." },
+  { id: "15", description: "The second atomic bomb was dropped on the Japanese city of Nagasaki on August 9, 1945. It caused massive destruction and loss of life. This bombing, along with others, pushed Japan to surrender soon after." },
+  { id: "16", description: "Albert Einstein helped alert the U.S. government to the dangers of Nazi nuclear research by signing a letter to Franklin D. Roosevelt in 1939. This letter warned that Germany might develop powerful atomic weapons. It led to the creation of the secret U.S. nuclear program, including Manhattan Project, whose main lab was called Project Y." },
+  { id: "17", description: "The atomic bomb known as Little Boy used uranium as its main fuel. Uranium atoms were split in a nuclear reaction to release a huge amount of energy. This type of bomb was simpler in design compared to later atomic weapons." },
+  { id: "18", description: "The atomic bomb called Fat Man used plutonium instead of uranium. It relied on a more complex implosion design to trigger the explosion. This made it more powerful and efficient than the uranium bomb." },
+  { id: "19", description: "On August 6, 1945, the bomb Little Boy was dropped on the city of Hiroshima. It caused massive destruction and killed tens of thousands instantly. This was the first time an atomic bomb was used in war." },
+  { id: "20", description: "On August 9, 1945, the bomb Fat Man was dropped on Nagasaki. The explosion caused widespread destruction and heavy casualties. This second bombing increased pressure on Japan to surrender." },
+  { id: "21", description: "After World War II, the United States and the Soviet Union became rivals in what is known as the Cold War. Both nations competed for global influence and power. This led to political tension, military buildup, and fear of nuclear war." },
+  { id: "22", description: "The Berlin Wall was built in 1961 to divide East and West Berlin. East Germany, supported by the Soviet Union, wanted to stop people from fleeing to the West. The wall became a powerful symbol of Cold War division." },
+  { id: "23", description: "Harry S. Truman and Winston Churchill were key leaders behind the Potsdam Declaration. They worked with other Allied leaders to demand Japan's surrender. The declaration warned Japan of complete destruction if it refused." },
+  { id: "24", description: "Operation Barbarossa began on June 22, 1941, when Germany invaded the Soviet Union. This broke the earlier non-aggression agreement between the two nations. It opened up the Eastern Front, one of the largest and deadliest parts of the war." },
+  { id: "25", description: "Operation Uranus was a Soviet counteroffensive during the Battle of Stalingrad. Soviet forces surrounded the German 6th Army, trapping thousands of soldiers. This marked a major turning point in favor of the Allies on the Eastern Front." },
+];
+
+let discoveredCount = 0;
+
+// ----------------------------
+// SCREEN TRANSITIONS
+// ----------------------------
+function startGame() {
+  document.getElementById("titleScreen").style.display = "none";
+  document.getElementById("gameScreen").style.display = "block";
+  updateDropdowns();
+  updateCount();
+  log("Game Started — combine elements to discover history.", "system");
+}
+
+function goBack() {
+  document.getElementById("gameScreen").style.display = "none";
+  document.getElementById("titleScreen").style.display = "flex";
+}
+
+// ----------------------------
+// DROPDOWNS
+// ----------------------------
+function updateDropdowns() {
+  let item1 = document.getElementById("item1");
+  let item2 = document.getElementById("item2");
+  let prev1 = item1.value;
+  let prev2 = item2.value;
+
+  item1.innerHTML = "";
+  item2.innerHTML = "";
+
+  let sorted = [...discovered].sort();
+  sorted.forEach(item => {
+    let o1 = document.createElement("option");
+    o1.text = item;
+    item1.add(o1);
+
+    let o2 = document.createElement("option");
+    o2.text = item;
+    item2.add(o2);
+  });
+
+  if (prev1) item1.value = prev1;
+  if (prev2) item2.value = prev2;
+}
+
+// ----------------------------
+// DISCOVERY COUNTER
+// ----------------------------
+function updateCount() {
+  document.getElementById("discoveryCount").textContent = discoveredCount + " / 25";
+}
+
+// ----------------------------
+// DESCRIPTION LOOKUP
+// ----------------------------
+function getDescriptionById(id) {
+  let match = descriptions.find(d => d.id === id);
+  return match ? match.description : "No description found.";
+}
+
+// ----------------------------
+// LOG
+// ----------------------------
+function log(message, type) {
+  let logDiv = document.getElementById("log");
+  let entry = document.createElement("div");
+  entry.className = "log-entry";
+
+  if (type === "success") entry.classList.add("log-success");
+  else if (type === "warn")    entry.classList.add("log-warn");
+  else if (type === "fail")    entry.classList.add("log-fail");
+  else if (type === "desc")    entry.classList.add("log-desc");
+  else                         entry.classList.add("log-system");
+
+  entry.textContent = message;
+  logDiv.appendChild(entry);
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+// ----------------------------
+// POPUP
+// ----------------------------
+function showPopup(el1, el2, result, description) {
+  document.getElementById("popEl1").textContent = el1;
+  document.getElementById("popEl2").textContent = el2;
+  document.getElementById("popResult").textContent = result;
+  document.getElementById("popResultTitle").textContent = result;
+  document.getElementById("popDesc").textContent = description;
+  document.getElementById("popupOverlay").classList.add("active");
+}
+
+function closePopup(event) {
+  // Close if clicking overlay background or the button (not the box itself)
+  if (!event || event.target === document.getElementById("popupOverlay") || event.target === document.getElementById("popupClose")) {
+    document.getElementById("popupOverlay").classList.remove("active");
+  }
+}
+
+// ----------------------------
+// COMBINE
+// ----------------------------
+function combineItems() {
+  let item1 = document.getElementById("item1").value;
+  let item2 = document.getElementById("item2").value;
+
+  log("Combining: " + item1 + " + " + item2, "system");
+
+  if (!discovered.has(item1) || !discovered.has(item2)) {
+    log("❌ Invalid selection.", "fail");
+    return;
+  }
+
+  let recipe = recipes.find(r =>
+    (r.a === item1 && r.b === item2) ||
+    (r.a === item2 && r.b === item1)
+  );
+
+  if (recipe) {
+    if (!discovered.has(recipe.result)) {
+      discovered.add(recipe.result);
+      discoveredCount++;
+      let desc = getDescriptionById(recipe.id);
+      log("✅ New Discovery: " + recipe.result, "success");
+      log("📖 " + desc, "desc");
+      updateDropdowns();
+      updateCount();
+      showPopup(item1, item2, recipe.result, desc);
+
+      if (discoveredCount === 25) {
+        log("🎖️ All 25 events discovered! You've mastered WWII history!", "warn");
+      }
+    } else {
+      log("⚠️ Already discovered: " + recipe.result, "warn");
+    }
+  } else {
+    log("❌ No combination found.", "fail");
+  }
+}
+</script>
+
+</body>
+</html>
